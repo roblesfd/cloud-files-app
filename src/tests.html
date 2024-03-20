@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resizable Columns</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .resizable-column {
+      position: relative;
+    }
+
+    .resizable-handle {
+      position: absolute;
+      top: 0;
+      right: -5px;
+      width: 10px;
+      height: 100%;
+      cursor: ew-resize;
+    }
+  </style>
+</head>
+<body class="bg-gray-200 h-screen flex items-center justify-center">
+  <div class="flex">
+    <div class="w-1/2 bg-blue-500 resizable-column">
+      Columna 1
+      <div class="resizable-handle bg-gray-300"></div>
+    </div>
+    <div class="w-1/2 bg-green-500">
+      Columna 2
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.resizable-handle').forEach(handle => {
+      handle.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        const column = this.parentNode;
+        const startX = e.clientX;
+        const startWidth = parseInt(document.defaultView.getComputedStyle(column).width, 10);
+
+        document.addEventListener('mousemove', moveHandler);
+        document.addEventListener('mouseup', () => {
+          document.removeEventListener('mousemove', moveHandler);
+        });
+
+        function moveHandler(e) {
+          const width = startWidth + e.clientX - startX;
+          column.style.width = width + 'px';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
